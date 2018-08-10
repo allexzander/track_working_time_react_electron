@@ -1,11 +1,11 @@
 // @flow
 import { combineReducers } from 'redux';
 import { routerReducer as router } from 'react-router-redux';
-import counter from './counter';
+
+import { timeTracker } from "./timeTracker"
 
 const rootReducer = combineReducers({
-  counter,
-  router
+  timeTracker,
 });
 
 export default rootReducer;

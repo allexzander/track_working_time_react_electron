@@ -2,12 +2,25 @@
 import React, { Component } from 'react';
 import Home from '../components/Home';
 
-type Props = {};
+import {
+  timeTrackerStart,
+} from "../actions/timeTracker";
 
-export default class HomePage extends Component<Props> {
-  props: Props;
+import { connect } from 'react-redux'
 
+import { bindActionCreators } from 'redux';
+
+class HomePage extends Component {
   render() {
-    return <Home />;
+    return <Home onTimeTrackerStart={() => this.props.timeTrackerStart()}/>;
   }
 }
+
+const mapStateToProps = state => ({
+});
+
+const mapDispatchToProps = dispatch => ({
+  timeTrackerStart: bindActionCreators(timeTrackerStart, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

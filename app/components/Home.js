@@ -1,20 +1,17 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes.json';
-import styles from './Home.css';
+import styles from './Home.scss';
 
-type Props = {};
-
-export default class Home extends Component<Props> {
-  props: Props;
-
-  render() {
+const Home = (props) => {
     return (
       <div className={styles.container} data-tid="container">
-        <h2>Home</h2>
-        <Link to={routes.COUNTER}>to Counter</Link>
+        <Link to={routes.TIMESHEET}>View Timesheet</Link>
+        <div><Link to={routes.TIMERWIDGETCONTAINER}>Show Timer Widget</Link></div>
+        <div><button onClick={() => props.onTimeTrackerStart()}>Start Time Tracker</button></div>
       </div>
     );
-  }
 }
+
+export default Home;
