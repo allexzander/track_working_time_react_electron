@@ -19,12 +19,16 @@ import {
   IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE,
 } from "../constants/common";
 
+import { TimeInTimezone } from "../utils/timeUtils";
+
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 
 type Props = {
   children: React.Node
 };
+
+const TimeOffset = "+5.5";
 
 import {
   timeTrackerWidgetShow,
@@ -41,10 +45,6 @@ class App extends React.Component<Props> {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentTimerValue: 0,
-    }
 
     this.currentTimerIntervalID = null;
 
@@ -81,6 +81,10 @@ class App extends React.Component<Props> {
   componentWillUnmount() {
     ipcRenderer.removeListener(IPC_EVENT_TIMER_WIDGET_OPEN, this.handleTimerWidgetOpen);
     ipcRenderer.removeListener(IPC_EVENT_TIMER_WIDGET_CLOSE, this.handleTimerWidgetClose);
+
+    if (this.currentTimerIntervalID) {
+      clearInterval(this.currentTimerIntervalID);
+    }
   }
 
   requestTimerWidgetClose() {
@@ -113,7 +117,7 @@ class App extends React.Component<Props> {
           <MainContent currentTimerValue={this.props.currentTimerValue} 
               isTimerRunning={this.props.isTimerRunning}
               onToggleTimer={this.handleToggleTimer}/>
-          <Footer currentTimerValue={this.props.currentTimerValue}/>
+          <Footer currentTimerValue={this.props.currentTimerValue} />
         </div>
     );
   }
