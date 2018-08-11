@@ -16,7 +16,7 @@ const initialState = {
 export function timeTracker(state = initialState, action) {
   switch (action.type) {
     case TIME_TRACKER_START: {
-      return { ...state, isTimerRunning: true, currentTimerValue: initialState.currentTimerValue}
+      return { ...state, isTimerRunning: true }
     }
     case TIME_TRACKER_STOP: {
       const currentTimerValue = state.currentTimerValue;

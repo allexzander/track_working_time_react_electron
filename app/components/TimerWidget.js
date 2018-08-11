@@ -6,13 +6,26 @@ import routes from '../constants/routes.json';
 
 import { ipcRenderer } from 'electron';
 
+import DragAndDropImage from "../resources/dragndrop.svg";
+
+import PlayImage from "../resources/play.svg";
+import StopImage from "../resources/stop.svg";
+
+import ClearImage from "../resources/clear.svg";
+
+import { FormatMilliseconds } from "../utils/timeUtils";
+
 const TimerWidget = (props) => {
-  console.dir(props);
+ const ButtonImage = props.isTimerRunning ? StopImage : PlayImage;
+ const TimeFormatted = FormatMilliseconds(props.currentTimerValue, "HH:mm");
+console.log(TimeFormatted);
   return (
-    <div>
-       <h1>{props.text}</h1>
-       <h2>{props.currentTimerValue}</h2>
-       <button onClick={props.onClose}>Close</button>
+    <div id="time-tracker-widget">
+          <div id="time-tracker-widget-dand-drop-container"><img src={DragAndDropImage} className="nonselectable invert"/></div>
+          <div id="time-tracker-widget-playstop-container" onClick={() => props.onToggleTimer()}><img src={ButtonImage} className="nonselectable invert"/></div>
+          <div id="time-tracker-widget-playstop-status-container" className={`nonselectable ${props.isTimerRunning ? " active" : ""}`}></div>
+          <div id="time-tracker-widget-playstop-time-container" className="nonselectable">{TimeFormatted}</div>
+          <div id="time-tracker-widget-clear-container" onClick={() => props.onClose()}><img src={ClearImage} className="nonselectable invert"/></div>
     </div>
   );
 }

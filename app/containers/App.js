@@ -9,6 +9,10 @@ import TimerWidget from "../components/TimerWidget";
 
 import WindowPortal from "../components/common/WindowPortal";
 
+import Header from "../components/Header";
+import MainContent from "../components/MainContent";
+import Footer from "../components/Footer";
+
 import { 
   IPC_EVENT_TIMER_WIDGET_OPEN, 
   IPC_EVENT_TIMER_WIDGET_CLOSE,
@@ -25,6 +29,9 @@ type Props = {
 import {
   timeTrackerWidgetShow,
   timeTrackerWidgetHide,
+
+  timeTrackerStart,
+  timeTrackerStop,
 
   timeTrackerTick,
 } from "../actions/timeTracker";
@@ -44,6 +51,7 @@ class App extends React.Component<Props> {
     this.handleTimerWidgetOpen = this.handleTimerWidgetOpen.bind(this);
     this.handleTimerWidgetClose = this.handleTimerWidgetClose.bind(this);
     this.requestTimerWidgetClose = this.requestTimerWidgetClose.bind(this);
+    this.handleToggleTimer = this.handleToggleTimer.bind(this);
   }
 
   handleTimerWidgetOpen() {
@@ -79,19 +87,35 @@ class App extends React.Component<Props> {
     ipcRenderer.send(IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE);
   }
 
+  handleToggleTimer() {
+    if (this.props.isTimerRunning) {
+      this.props.timeTrackerStop();
+    }
+    else {
+      this.props.timeTrackerStart();
+    }
+  }
+
   render() {
-    const { children } = this.props;
-    return (<React.Fragment>
-      {this.props.isWidgetVisible && 
-        <WindowPortal windowPortalHandle={this.props.widgetWindowHandle} onClick = {() => null}>
-          <TimerWidget onClose={() => this.requestTimerWidgetClose()} text="HELLO!" 
-            currentTimerValue={this.props.currentTimerValue} 
-            isTimerRunning={this.props.isTimerRunning}
-          />
-        </WindowPortal>
-      }
-    {children}
-    </React.Fragment>);
+    const { store, history } = this.props;
+    return (
+      <div id="main-wrapper">
+          {this.props.isWidgetVisible && 
+            <WindowPortal windowPortalHandle={this.props.widgetWindowHandle}>
+              <TimerWidget onClose={() => this.requestTimerWidgetClose()} 
+              currentTimerValue={this.props.currentTimerValue} 
+              isTimerRunning={this.props.isTimerRunning}
+              onToggleTimer={this.handleToggleTimer}
+            />
+          </WindowPortal>
+          }
+          <Header isTimerRunning={this.props.isTimerRunning}/>
+          <MainContent currentTimerValue={this.props.currentTimerValue} 
+              isTimerRunning={this.props.isTimerRunning}
+              onToggleTimer={this.handleToggleTimer}/>
+          <Footer currentTimerValue={this.props.currentTimerValue}/>
+        </div>
+    );
   }
 }
 
@@ -106,6 +130,8 @@ const mapDispatchToProps = dispatch => ({
   timeTrackerWidgetShow: bindActionCreators(timeTrackerWidgetShow, dispatch),
   timeTrackerWidgetHide: bindActionCreators(timeTrackerWidgetHide, dispatch),
 
+  timeTrackerStart: bindActionCreators(timeTrackerStart, dispatch),
+  timeTrackerStop: bindActionCreators(timeTrackerStop, dispatch),
 
   timeTrackerTick: bindActionCreators(timeTrackerTick, dispatch),
 });

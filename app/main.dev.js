@@ -14,13 +14,13 @@ let mainWindow = null;
 let timeTrackerWindow = null;
 
 const SizeMainWindow = {
-  width: 1024,
-  height: 768,
+  width: 928,
+  height: 384,
 }
 
 const SizeTimeTracker = {
-  width: 250,
-  height: 100,
+  width: 244,
+  height: 62,
 }
 
 const TimeTrackerWidgetPositionOffset = 10;
@@ -64,7 +64,9 @@ const initCustomBrowserWindowOpenLogic = (mainWindow) => {
         alwaysOnTop: true,
         resizable: false,
         frame: false,
-        parent: mainWindow,
+        transparent: true,
+        minimizable: false,
+        maximizable: false,
       })
       event.newGuest = new BrowserWindow(options);
 
@@ -121,6 +123,8 @@ app.on('ready', async () => {
     show: false,
     width: SizeMainWindow.width,
     height: SizeMainWindow.height,
+    resizable: false,
+    center: true,
     webPreferences: {
       nativeWindowOpen: true
     }

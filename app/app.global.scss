@@ -3,3 +3,210 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+.invert { filter: invert(100%); }
+
+.nonselectable {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+ 
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+html, head, body {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#main-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#main-header {
+    width: 100%;
+    height: 20%;
+    line-height: 70px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    padding-left: 30px;
+    color: #ffffff;
+    background-color: #4dbf77;
+}
+
+#main-header.disabled {
+    background-color: #6a849f;
+}
+
+#main-header-icon-container {
+    display: block;
+    padding-top: 5px;
+    float: left;
+}
+
+#main-header-icon {
+    margin-right: 4px;
+    width: 30px;
+    height: 30px;
+}
+
+//Main Content
+#main-content {
+    width: 100%;
+    height: 50%;
+}
+
+//Footer
+#main-footer {
+    width: 100%;
+    height: 30%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 22px;
+    padding-left: 10px;
+    color: #949eaa;
+    background-color: #edf0f7;
+}
+
+#main-footer-content {
+    padding-top: 20px;
+}
+
+#main-footer-time {
+    margin-bottom: 10px;
+}
+
+//Time Tracker Widget
+#time-tracker-widget {
+    background-color: #2b405b;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#time-tracker-widget-dand-drop-container {
+    width: 40px;
+}
+
+#time-tracker-widget-dand-drop-container img {
+    width: 100%;
+}
+
+#time-tracker-widget-playstop-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25);
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#time-tracker-widget-playstop-container img {
+    width: 50%;
+}
+
+#time-tracker-widget-playstop-status-container {
+    width: 15px;
+    height: 15px;
+    margin-left: 15px;
+    border-radius: 50%;
+    background-color: black;
+}
+
+#time-tracker-widget-playstop-status-container.active {
+    background-color: #53bd73;
+}
+
+#time-tracker-widget-playstop-time-container {
+    font-size: 22px;
+    color: #ffffff;
+    line-height: 62px;
+    margin-left: 15px;
+}
+
+#time-tracker-widget-clear-container {
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(8, 8, 8);
+    cursor: pointer;
+}
+
+#time-tracker-widget-clear-container img {
+    width: 40%;
+}
+
+#main-content-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100%;
+}
+
+#main-content-time-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-content-time-part {
+    font-size: 42px;
+    margin-left: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #53bd73;
+}
+
+.main-content-time-digit {
+    font-family: 'Roboto Mono', monospace;
+    color: #fff;
+    background: #53bd73;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#main-content-button-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 10px;
+    background: #53bd73;
+    margin-left: 60px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+#main-content-button-container img {
+    width: 50%;
+}
