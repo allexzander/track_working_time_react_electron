@@ -9,6 +9,12 @@ import TimerWidget from "../components/TimerWidget";
 
 import WindowPortal from "../components/common/WindowPortal";
 
+import { 
+  IPC_EVENT_TIMER_WIDGET_OPEN, 
+  IPC_EVENT_TIMER_WIDGET_CLOSE,
+  IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE,
+} from "../constants/common";
+
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 
@@ -32,30 +38,26 @@ class App extends React.Component<Props> {
     this.requestTimerWidgetClose = this.requestTimerWidgetClose.bind(this);
   }
 
-  handleTimerWidgetOpen(_, windowHandle) {
-    console.log("timer-widget-open");
-    console.dir(windowHandle);
-    this.props.timeTrackerWidgetShow(windowHandle);
+  handleTimerWidgetOpen() {
+    this.props.timeTrackerWidgetShow();
   }
 
   handleTimerWidgetClose() {
-    console.log("timer-widget-close");
     this.props.timeTrackerWidgetHide();
   }
 
   componentDidMount() {
-    ipcRenderer.on("timer-widget-open", this.handleTimerWidgetOpen);
-    ipcRenderer.on("timer-widget-close", this.handleTimerWidgetClose);
+    ipcRenderer.on(IPC_EVENT_TIMER_WIDGET_OPEN, this.handleTimerWidgetOpen);
+    ipcRenderer.on(IPC_EVENT_TIMER_WIDGET_CLOSE, this.handleTimerWidgetClose);
   }
  
   componentWillUnmount() {
-    ipcRenderer.removeListener("timer-widget-open", this.handleTimerWidgetOpen);
-    ipcRenderer.removeListener("timer-widget-close", this.handleTimerWidgetClose);
+    ipcRenderer.removeListener(IPC_EVENT_TIMER_WIDGET_OPEN, this.handleTimerWidgetOpen);
+    ipcRenderer.removeListener(IPC_EVENT_TIMER_WIDGET_CLOSE, this.handleTimerWidgetClose);
   }
 
   requestTimerWidgetClose() {
-    console.log("requestTimerWidgetClose");
-    ipcRenderer.send("request_timer_widget_close");
+    ipcRenderer.send(IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE);
   }
 
   render() {

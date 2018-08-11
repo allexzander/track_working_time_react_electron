@@ -1,20 +1,14 @@
-/* eslint global-require: 0, flowtype-errors/show-errors: 0 */
+import { app, BrowserWindow, ipcMain, screen as screenElectron} from 'electron';
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `yarn build` or `yarn build-main`, this file is compiled to
- * `./app/main.prod.js` using webpack. This gives us some performance wins.
- *
- * @flow
- */
-import { app, BrowserWindow, screen as screenElectron, ipcMain} from 'electron';
 import MenuBuilder from './menu';
-
 import { MENU_ACTION_TOGGLE_TIMETRACKER } from './menuactions';
-import TimerWidget from './components/TimerWidget';
+
+import { 
+  TIMER_WIDGET_NAME, 
+  IPC_EVENT_TIMER_WIDGET_OPEN,
+  IPC_EVENT_TIMER_WIDGET_CLOSE,
+  IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE,
+} from "./constants/common";
 
 let mainWindow = null;
 let timeTrackerWindow = null;
@@ -33,22 +27,56 @@ const TimeTrackerWidgetPositionOffset = 10;
 
 const MenuActionsMap = {};
 
-MenuActionsMap[MENU_ACTION_TOGGLE_TIMETRACKER] = function MENU_ACTION_TOGGLE_TIMETRACKER () {
-  console.log("MENU_ACTION_TOGGLE_TIMETRACKER");
+const toggleTimeTrackerWidget = () => {
   if (timeTrackerWindow) {
     timeTrackerWindow.close();
   }
   else {
-    mainWindow.webContents.send('timer-widget-open', null);
+    mainWindow.webContents.send(IPC_EVENT_TIMER_WIDGET_OPEN);
   }
 }
 
-ipcMain.on("request_timer_widget_close", (event) => {
-  console.log("request_timer_widget_close");
+MenuActionsMap[MENU_ACTION_TOGGLE_TIMETRACKER] = function MENU_ACTION_TOGGLE_TIMETRACKER () {
+  toggleTimeTrackerWidget();
+}
+
+ipcMain.on(IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE, (event) => {
   if (timeTrackerWindow) {
-    timeTrackerWindow.close();
+    toggleTimeTrackerWidget();
   }
-})
+});
+
+const initCustomBrowserWindowOpenLogic = (mainWindow) => {
+  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    if (frameName === TIMER_WIDGET_NAME) {
+      
+      const primaryDisplay = screenElectron.getPrimaryDisplay();
+
+      const positionX = primaryDisplay.size.width - SizeTimeTracker.width - TimeTrackerWidgetPositionOffset;
+      const positionY = primaryDisplay.size.height - SizeTimeTracker.height - TimeTrackerWidgetPositionOffset;
+
+      event.preventDefault()
+      Object.assign(options, {
+        x: positionX,
+        y: positionY,
+        width: SizeTimeTracker.width,
+        height: SizeTimeTracker.height,
+        alwaysOnTop: true,
+        resizable: false,
+        frame: false,
+        parent: mainWindow,
+      })
+      event.newGuest = new BrowserWindow(options);
+
+      timeTrackerWindow = event.newGuest;
+
+      timeTrackerWindow.on('closed', () => {
+        mainWindow.webContents.send(IPC_EVENT_TIMER_WIDGET_CLOSE);
+        timeTrackerWindow = null;
+      });
+    }
+  })
+}
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -75,13 +103,7 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-/**
- * Add event listeners...
- */
-
 app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -104,40 +126,10 @@ app.on('ready', async () => {
     }
   });
 
-  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
-    if (frameName === 'timer-widget-window') {
-      
-      const primaryDisplay = screenElectron.getPrimaryDisplay();
-
-      const positionX = primaryDisplay.size.width - SizeTimeTracker.width - TimeTrackerWidgetPositionOffset;
-      const positionY = primaryDisplay.size.height - SizeTimeTracker.height - TimeTrackerWidgetPositionOffset;
-
-      event.preventDefault()
-      Object.assign(options, {
-        x: positionX,
-        y: positionY,
-        width: SizeTimeTracker.width,
-        height: SizeTimeTracker.height,
-        alwaysOnTop: true,
-        resizable: false,
-        frame: false,
-        parent: mainWindow,
-      })
-      event.newGuest = new BrowserWindow(options);
-
-      timeTrackerWindow = event.newGuest;
-
-      timeTrackerWindow.on('closed', () => {
-        mainWindow.webContents.send('timer-widget-close', null);
-        timeTrackerWindow = null;
-      });
-    }
-  })
+  initCustomBrowserWindowOpenLogic(mainWindow);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');

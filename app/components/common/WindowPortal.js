@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-class Window extends React.Component {
+import { TIMER_WIDGET_NAME } from "../../constants/common";
+
+class WindowPortal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { win: null, el: null };
+
+    this.state = { 
+      element: null 
+    };
+
+    this.portalWindow = null;
   }
 
   componentDidMount() {
-    let win = window.open('', 'timer-widget-window',);
-    let el = document.createElement('div');
-    win.document.body.appendChild(el);
-    this.setState({ win, el });
+    this.portalWindow = window.open('', TIMER_WIDGET_NAME,);
+    const element = document.createElement('div');
+    this.portalWindow.document.body.appendChild(element);
+    this.setState({ element: element });
   }
 
   render() {
-    const { el } = this.state;
-    if (!el) {
+    const { element } = this.state;
+    if (!element) {
       return null;
     }
-    return ReactDOM.createPortal(this.props.children, el);
+    return ReactDOM.createPortal(this.props.children, element);
   }
 }
 
-export default Window;
+export default WindowPortal;

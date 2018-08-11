@@ -6,7 +6,6 @@ import {
 
 const initialState = {
   isWidgetVisible: false,
-  widgetWindowHandle: null,
 }
 
 export function timeTracker(state = initialState, action) {
@@ -15,10 +14,10 @@ export function timeTracker(state = initialState, action) {
       return { ...state }
     }
     case TIME_TRACKER_WIDGET_SHOW: {
-      return { ...state, isWidgetVisible: true, widgetWindowHandle: action.data.widgetWindowHandle };
+      return { ...state, isWidgetVisible: true };
     }
     case TIME_TRACKER_WIDGET_HIDE: {
-      return { ...state, isWidgetVisible: false, widgetWindowHandle: null };
+      return { ...state, isWidgetVisible: false };
     }
 
     default:

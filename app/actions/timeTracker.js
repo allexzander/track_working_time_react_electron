@@ -11,9 +11,8 @@ export function timeTrackerStart() {
     }
 }
 
-export function timeTrackerWidgetShow(widgetWindowHandle) {
+export function timeTrackerWidgetShow() {
     return {
-        data: { widgetWindowHandle: widgetWindowHandle },
         type: TIME_TRACKER_WIDGET_SHOW,
     }
 }
