@@ -4,13 +4,22 @@ import { Link } from 'react-router-dom';
 import styles from './TimerWidget.scss';
 import routes from '../constants/routes.json';
 
-const TimeSheet1 = (props) => {
+import { ipcRenderer } from 'electron';
+
+const handleClick = (event) => {
+  event.preventDefault();
+  console.log("handleClick");
+  ipcRenderer.send("request_timer_widget_close")
+}
+
+const TimerWidget = (props) => {
+  console.dir(props);
   return (
-    <div>
-       <h1>Timer Widget</h1>
-       <button onClick={() => props.onClose()}>Close</button>
+    <div onClick = {() => null}>
+       <h1>{props.text}</h1>
+       <button onClick={handleClick}>Close</button>
     </div>
   );
 }
 
-export default TimeSheet1;
+export default TimerWidget;

@@ -10,10 +10,45 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen as screenElectron, ipcMain} from 'electron';
 import MenuBuilder from './menu';
 
+import { MENU_ACTION_TOGGLE_TIMETRACKER } from './menuactions';
+import TimerWidget from './components/TimerWidget';
+
 let mainWindow = null;
+let timeTrackerWindow = null;
+
+const SizeMainWindow = {
+  width: 1024,
+  height: 768,
+}
+
+const SizeTimeTracker = {
+  width: 250,
+  height: 100,
+}
+
+const TimeTrackerWidgetPositionOffset = 10;
+
+const MenuActionsMap = {};
+
+MenuActionsMap[MENU_ACTION_TOGGLE_TIMETRACKER] = function MENU_ACTION_TOGGLE_TIMETRACKER () {
+  console.log("MENU_ACTION_TOGGLE_TIMETRACKER");
+  if (timeTrackerWindow) {
+    timeTrackerWindow.close();
+  }
+  else {
+    mainWindow.webContents.send('timer-widget-open', null);
+  }
+}
+
+ipcMain.on("request_timer_widget_close", (event) => {
+  console.log("request_timer_widget_close");
+  if (timeTrackerWindow) {
+    timeTrackerWindow.close();
+  }
+})
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -62,9 +97,42 @@ app.on('ready', async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728
+    width: SizeMainWindow.width,
+    height: SizeMainWindow.height,
+    webPreferences: {
+      nativeWindowOpen: true
+    }
   });
+
+  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    if (frameName === 'timer-widget-window') {
+      
+      const primaryDisplay = screenElectron.getPrimaryDisplay();
+
+      const positionX = primaryDisplay.size.width - SizeTimeTracker.width - TimeTrackerWidgetPositionOffset;
+      const positionY = primaryDisplay.size.height - SizeTimeTracker.height - TimeTrackerWidgetPositionOffset;
+
+      event.preventDefault()
+      Object.assign(options, {
+        x: positionX,
+        y: positionY,
+        width: SizeTimeTracker.width,
+        height: SizeTimeTracker.height,
+        alwaysOnTop: true,
+        resizable: false,
+        frame: false,
+        parent: mainWindow,
+      })
+      event.newGuest = new BrowserWindow(options);
+
+      timeTrackerWindow = event.newGuest;
+
+      timeTrackerWindow.on('closed', () => {
+        mainWindow.webContents.send('timer-widget-close', null);
+        timeTrackerWindow = null;
+      });
+    }
+  })
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
@@ -82,6 +150,6 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
+  const menuBuilder = new MenuBuilder(mainWindow, MenuActionsMap);
   menuBuilder.buildMenu();
 });

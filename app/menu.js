@@ -1,11 +1,17 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
 
+import {
+  MENU_ACTION_TOGGLE_TIMETRACKER,
+} from './menuactions';
+
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
+  actionsMap: any;
 
-  constructor(mainWindow: BrowserWindow) {
+  constructor(mainWindow: BrowserWindow, actionsMap) {
     this.mainWindow = mainWindow;
+    this.actionsMap = actionsMap;
   }
 
   buildMenu() {
@@ -194,6 +200,16 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
+            }
+          },
+          {
+            label: '&Toggle Time Tracker',
+            accelerator: 'T',
+            click: () => {
+              console.dir(this.actionsMap);
+              if (this.actionsMap && this.actionsMap[MENU_ACTION_TOGGLE_TIMETRACKER]) {
+                this.actionsMap[MENU_ACTION_TOGGLE_TIMETRACKER].call();
+              }
             }
           }
         ]

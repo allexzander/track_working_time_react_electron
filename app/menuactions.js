@@ -1,0 +1,1 @@
+export const MENU_ACTION_TOGGLE_TIMETRACKER = "menu_action_toggle_timetracker";
