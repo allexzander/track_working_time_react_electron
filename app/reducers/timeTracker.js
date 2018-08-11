@@ -9,7 +9,7 @@ import {
 const initialState = {
   isWidgetVisible: false,
   isTimerRunning: false,
-  currentTimerValue: 0,
+  currentTimerValue: 3600000,
   timeSheet: [],
 }
 

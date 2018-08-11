@@ -117,7 +117,7 @@ class App extends React.Component<Props> {
           <MainContent currentTimerValue={this.props.currentTimerValue} 
               isTimerRunning={this.props.isTimerRunning}
               onToggleTimer={this.handleToggleTimer}/>
-          <Footer currentTimerValue={this.props.currentTimerValue} />
+          <Footer totalTime={this.props.currentTimerValue} />
         </div>
     );
   }

@@ -12,9 +12,8 @@ const Footer = (props) => {
 
   const hours = momentDuration.hours() >= 10 ? momentDuration.hours().toString() : `0${momentDuration.hours()}`;
   const minutes = momentDuration.minutes() >= 10 ? momentDuration.minutes().toString() : `0${momentDuration.minutes()}`;
-
-  console.log(hours);
-  const TimeDurationFormatted = `${momentDuration.hours() > 0 ? hours + "h " : ""}${momentDuration.minutes() > 0 ? minutes + "m " : ""}`
+  
+  const TimeDurationFormatted = `${momentDuration.hours() > 0 ? hours + "h" : ""} ${momentDuration.minutes() > 0 ? minutes + "m " : ""}`
 //10:28 PM GMT+08:00
   return (
     <div id="main-footer">

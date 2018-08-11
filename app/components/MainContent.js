@@ -27,7 +27,7 @@ const MainContent = (props) => {
   const ButtonImage = props.isTimerRunning ? StopImage : PlayImage;
 
   return (
-    <div id="main-content">
+    <div id="main-content" className={`${!props.isTimerRunning ? "disabled" : ""}`}>
       <div id="main-content-container">
        <div id="main-content-time-container">
          <div className="main-content-time-part main-content-time-digit">

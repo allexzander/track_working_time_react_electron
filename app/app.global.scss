@@ -84,6 +84,10 @@ html, head, body {
     background-color: #edf0f7;
 }
 
+#main-footer-time {
+    color: #7a818a;
+}
+
 #main-footer-content {
     padding-top: 20px;
 }
@@ -180,6 +184,9 @@ html, head, body {
     margin-left: 2px;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.main-content-time-separator {
     color: #53bd73;
 }
 
@@ -210,3 +217,12 @@ html, head, body {
 #main-content-button-container img {
     width: 50%;
 }
+
+#main-content.disabled .main-content-time-digit,
+#main-content.disabled #main-content-button-container {
+    background: #6a849f;
+}
+
+#main-content.disabled .main-content-time-separator {
+    color: #6a849f;
+} 

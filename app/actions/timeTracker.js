@@ -22,6 +22,7 @@ export function timeTrackerStop() {
 export function timeTrackerTick() {
     return {
         type: TIME_TRACKER_TICK,
+        date: new Date(),
     }
 }
 
