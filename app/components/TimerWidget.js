@@ -9,8 +9,9 @@ import { ipcRenderer } from 'electron';
 const TimerWidget = (props) => {
   console.dir(props);
   return (
-    <div onClick = {() => null}>
+    <div>
        <h1>{props.text}</h1>
+       <h2>{props.currentTimerValue}</h2>
        <button onClick={props.onClose}>Close</button>
     </div>
   );

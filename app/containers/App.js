@@ -24,7 +24,9 @@ type Props = {
 
 import {
   timeTrackerWidgetShow,
-  timeTrackerWidgetHide
+  timeTrackerWidgetHide,
+
+  timeTrackerTick,
 } from "../actions/timeTracker";
 
 class App extends React.Component<Props> {
@@ -32,6 +34,12 @@ class App extends React.Component<Props> {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      currentTimerValue: 0,
+    }
+
+    this.currentTimerIntervalID = null;
 
     this.handleTimerWidgetOpen = this.handleTimerWidgetOpen.bind(this);
     this.handleTimerWidgetClose = this.handleTimerWidgetClose.bind(this);
@@ -44,6 +52,17 @@ class App extends React.Component<Props> {
 
   handleTimerWidgetClose() {
     this.props.timeTrackerWidgetHide();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.isTimerRunning && this.props.isTimerRunning) {
+      this.currentTimerIntervalID = setInterval(() => this.props.timeTrackerTick(), 1000);
+    }
+    else if (prevProps.isTimerRunning && !this.props.isTimerRunning) {
+      if (this.currentTimerIntervalID) {
+        clearInterval(this.currentTimerIntervalID);
+      }
+    }
   }
 
   componentDidMount() {
@@ -63,9 +82,14 @@ class App extends React.Component<Props> {
   render() {
     const { children } = this.props;
     return (<React.Fragment>
-      {this.props.isWidgetVisible && <WindowPortal windowPortalHandle={this.props.widgetWindowHandle} onClick = {() => null}>
-        <TimerWidget onClose={() => this.requestTimerWidgetClose()} text="HELLO!"/>
-      </WindowPortal>}
+      {this.props.isWidgetVisible && 
+        <WindowPortal windowPortalHandle={this.props.widgetWindowHandle} onClick = {() => null}>
+          <TimerWidget onClose={() => this.requestTimerWidgetClose()} text="HELLO!" 
+            currentTimerValue={this.props.currentTimerValue} 
+            isTimerRunning={this.props.isTimerRunning}
+          />
+        </WindowPortal>
+      }
     {children}
     </React.Fragment>);
   }
@@ -74,12 +98,16 @@ class App extends React.Component<Props> {
 const mapStateToProps = state => ({
   isWidgetVisible: state.timeTracker.isWidgetVisible,
   widgetWindowHandle: state.timeTracker.widgetWindowHandle,
-
+  currentTimerValue: state.timeTracker.currentTimerValue,
+  isTimerRunning: state.timeTracker.isTimerRunning,
 });
 
 const mapDispatchToProps = dispatch => ({
   timeTrackerWidgetShow: bindActionCreators(timeTrackerWidgetShow, dispatch),
   timeTrackerWidgetHide: bindActionCreators(timeTrackerWidgetHide, dispatch),
+
+
+  timeTrackerTick: bindActionCreators(timeTrackerTick, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

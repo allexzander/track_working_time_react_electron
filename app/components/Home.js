@@ -7,9 +7,11 @@ import styles from './Home.scss';
 const Home = (props) => {
     return (
       <div className={styles.container} data-tid="container">
+        <div><h1>{props.currentTimerValue}</h1></div>
         <Link to={routes.TIMESHEET}>View Timesheet</Link>
-        <div><Link to={routes.TIMERWIDGETCONTAINER}>Show Timer Widget</Link></div>
-        <div><button onClick={() => props.onTimeTrackerStart()}>Start Time Tracker</button></div>
+        {props.isTimerRunning ? <div><button onClick={() => props.onTimeTrackerStop()}>Stop Time Tracker</button></div>
+      :
+      <div><button onClick={() => props.onTimeTrackerStart()}>Start Time Tracker</button></div>}
       </div>
     );
 }

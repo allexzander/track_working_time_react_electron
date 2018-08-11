@@ -8,6 +8,15 @@ const TimeSheet = (props) => {
   return (
     <div>
        <h1>Time Sheet</h1>
+       {props.timeSheet && props.timeSheet.length > 0 && <ul>
+         {
+           props.timeSheet.map((value, i) => {
+             return (
+               <li key={i}>{value}</li>
+             )
+           })
+         }
+       </ul>}
        <Link to={routes.HOME}>
           Back
        </Link>
