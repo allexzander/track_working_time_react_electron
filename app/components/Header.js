@@ -7,9 +7,9 @@ const Header = (props) => {
   return (
     <div id="main-header" className={`${!props.isTimerRunning ? "disabled" : ""}`}>
        <span id="main-header-icon-container">
-         <img src={ImageAnalogClock} className="invert nonselectable" id="main-header-icon"/>
+         <img src={ImageAnalogClock} className="invert nonselectable cursor-default" id="main-header-icon"/>
        </span>
-       <span className="nonselectable">
+       <span className="nonselectable cursor-default">
          Time Doctor
        </span>
     </div>

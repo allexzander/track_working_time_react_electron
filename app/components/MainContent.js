@@ -34,7 +34,7 @@ const MainContent = (props) => {
          minutePrimary={minutePrimary} minuteSecondary={minuteSecondary}
          secondPrimary={secondPrimary} secondSecondary={secondSecondary} />
        <div id="main-content-button-container" onClick={() => props.onToggleTimer()}>
-         <img src={ButtonImage} className="nonselectable invert nonselectable"/>
+         <img src={ButtonImage} className="nonselectable invert"/>
        </div>
       </div>
     </div>

@@ -19,15 +19,15 @@ const Footer = (props) => {
     <div id="main-footer">
       <div id="main-footer-content">
          <div id="main-footer-time">
-           <span className="nonselectable">Worked Today: </span>
-           <span id="main-footer-time-value" className="nonselectable">
+           <span className="nonselectable cursor-default">Worked Today: </span>
+           <span id="main-footer-time-value" className="nonselectable cursor-default">
              {TimeDurationFormatted}
            </span>
          </div>
          <div id="main-footer-company-time">
-           <span className="nonselectable">Company Time: </span>
+           <span className="nonselectable cursor-default">Company Time: </span>
            <span id="main-footer-company-time-value">
-             <Clock format={`hh:mm A [GMT]Z`} ticking={true} timezone={TimeZone} className="nonselectable"/>
+             <Clock format={`hh:mm A [GMT]Z`} ticking={true} timezone={TimeZone} className="nonselectable cursor-default"/>
            </span>
         </div>
        </div>

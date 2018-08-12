@@ -19,21 +19,21 @@ const TimerWidget = (props) => {
     <div id="time-tracker-widget">
     
       <div id="time-tracker-widget-dand-drop-container">
-        <img src={DragAndDropImage} className="nonselectable invert"/>
+        <img src={DragAndDropImage} className="invert nonselectable"/>
       </div>
 
       <div id="time-tracker-widget-playstop-container" onClick={() => props.onToggleTimer()}>
-        <img src={ButtonImage} className="nonselectable invert"/>
+        <img src={ButtonImage} className="invert nonselectable"/>
       </div>
 
-      <div id="time-tracker-widget-playstop-status-container" className={`nonselectable ${props.isTimerRunning ? " active" : ""}`}></div>
+      <div id="time-tracker-widget-playstop-status-container" className={`nonselectable cursor-default ${props.isTimerRunning ? " active" : ""}`}></div>
 
-      <div id="time-tracker-widget-playstop-time-container" className="nonselectable">
+      <div id="time-tracker-widget-playstop-time-container" className="nonselectable cursor-default">
         {TimeFormatted}
       </div>
 
       <div id="time-tracker-widget-clear-container" onClick={() => props.onClose()}>
-        <img src={ClearImage} className="nonselectable invert"/>
+        <img src={ClearImage} className="invert nonselectable"/>
       </div>
 
     </div>
