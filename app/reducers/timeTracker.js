@@ -9,8 +9,7 @@ import {
 const initialState = {
   isWidgetVisible: false,
   isTimerRunning: false,
-  currentTimerValue: 3600000,
-  timeSheet: [],
+  currentTimerValue: 0,
 }
 
 export function timeTracker(state = initialState, action) {
@@ -20,10 +19,10 @@ export function timeTracker(state = initialState, action) {
     }
     case TIME_TRACKER_STOP: {
       const currentTimerValue = state.currentTimerValue;
-      return { ...state, isTimerRunning: false, timeSheet: state.timeSheet.concat([currentTimerValue])}
+      return { ...state, isTimerRunning: false }
     }
     case TIME_TRACKER_TICK: {
-      return { ...state, currentTimerValue: state.currentTimerValue + 1000 }
+      return { ...state, currentTimerValue: state.currentTimerValue + action.data.tickCount }
     }
     case TIME_TRACKER_WIDGET_SHOW: {
       return { ...state, isWidgetVisible: true };

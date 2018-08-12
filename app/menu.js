@@ -206,7 +206,6 @@ export default class MenuBuilder {
             label: '&Toggle Time Tracker',
             accelerator: 'T',
             click: () => {
-              console.dir(this.actionsMap);
               if (this.actionsMap && this.actionsMap[MENU_ACTION_TOGGLE_TIMETRACKER]) {
                 this.actionsMap[MENU_ACTION_TOGGLE_TIMETRACKER].call();
               }

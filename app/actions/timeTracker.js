@@ -6,7 +6,6 @@ import {
     TIME_TRACKER_WIDGET_HIDE,
 } from './actionTypes';
 
-
 export function timeTrackerStart() {
     return {
         type: TIME_TRACKER_START,
@@ -19,10 +18,10 @@ export function timeTrackerStop() {
     }
 }
 
-export function timeTrackerTick() {
+export function timeTrackerTick(tickCount) {
     return {
         type: TIME_TRACKER_TICK,
-        date: new Date(),
+        data: { tickCount: tickCount }
     }
 }
 

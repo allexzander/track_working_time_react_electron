@@ -8,17 +8,15 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
+$mainStatusActive: #4dbf77;
+$mainStatusInActive: #6a849f;
+
 .invert { filter: invert(100%); }
 
 .nonselectable {
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
- 
-    /*
-      Introduced in IE 10.
-      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-    */
     -ms-user-select: none;
     user-select: none;
 }
@@ -40,25 +38,26 @@ html, head, body {
     overflow: hidden;
 }
 
+//Header
 #main-header {
     width: 100%;
     height: 20%;
-    line-height: 70px;
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     padding-left: 30px;
     color: #ffffff;
-    background-color: #4dbf77;
+    background-color: $mainStatusActive;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 }
 
 #main-header.disabled {
-    background-color: #6a849f;
+    background-color: $mainStatusInActive;
 }
 
 #main-header-icon-container {
     display: block;
-    padding-top: 5px;
-    float: left;
 }
 
 #main-header-icon {
@@ -72,6 +71,68 @@ html, head, body {
     width: 100%;
     height: 50%;
 }
+
+#main-content-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100%;
+}
+
+#main-content-time-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-content-time-part {
+    font-size: 42px;
+    margin-left: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.main-content-time-separator {
+    color: $mainStatusActive;
+}
+
+.main-content-time-digit {
+    font-family: 'Roboto Mono', monospace;
+    color: #fff;
+    background: $mainStatusActive;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#main-content-button-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 10px;
+    background: $mainStatusActive;
+    margin-left: 60px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+#main-content-button-container img {
+    width: 50%;
+}
+
+#main-content.disabled .main-content-time-digit,
+#main-content.disabled #main-content-button-container {
+    background: $mainStatusInActive;
+}
+
+#main-content.disabled .main-content-time-separator {
+    color: $mainStatusInActive;
+} 
 
 //Footer
 #main-footer {
@@ -140,7 +201,7 @@ html, head, body {
 }
 
 #time-tracker-widget-playstop-status-container.active {
-    background-color: #53bd73;
+    background-color: $mainStatusActive;
 }
 
 #time-tracker-widget-playstop-time-container {
@@ -164,65 +225,3 @@ html, head, body {
 #time-tracker-widget-clear-container img {
     width: 40%;
 }
-
-#main-content-container {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    height: 100%;
-}
-
-#main-content-time-container {
-    display: flex;
-    flex-direction: row;
-}
-
-.main-content-time-part {
-    font-size: 42px;
-    margin-left: 2px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.main-content-time-separator {
-    color: #53bd73;
-}
-
-.main-content-time-digit {
-    font-family: 'Roboto Mono', monospace;
-    color: #fff;
-    background: #53bd73;
-    border-radius: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-#main-content-button-container {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    padding: 10px;
-    background: #53bd73;
-    margin-left: 60px;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    cursor: pointer;
-}
-
-#main-content-button-container img {
-    width: 50%;
-}
-
-#main-content.disabled .main-content-time-digit,
-#main-content.disabled #main-content-button-container {
-    background: #6a849f;
-}
-
-#main-content.disabled .main-content-time-separator {
-    color: #6a849f;
-} 

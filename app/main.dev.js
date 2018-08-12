@@ -7,7 +7,6 @@ import {
   TIMER_WIDGET_NAME, 
   IPC_EVENT_TIMER_WIDGET_OPEN,
   IPC_EVENT_TIMER_WIDGET_CLOSE,
-  IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE,
 } from "./constants/common";
 
 let mainWindow = null;
@@ -23,37 +22,27 @@ const SizeTimeTracker = {
   height: 62,
 }
 
-const TimeTrackerWidgetPositionOffset = 10;
-
-const MenuActionsMap = {};
+const TimeTrackerWindowPositionOffset = 10;
 
 const toggleTimeTrackerWidget = () => {
   if (timeTrackerWindow) {
-    timeTrackerWindow.close();
+    mainWindow.webContents.send(IPC_EVENT_TIMER_WIDGET_CLOSE);
   }
   else {
     mainWindow.webContents.send(IPC_EVENT_TIMER_WIDGET_OPEN);
   }
 }
 
-MenuActionsMap[MENU_ACTION_TOGGLE_TIMETRACKER] = function MENU_ACTION_TOGGLE_TIMETRACKER () {
-  toggleTimeTrackerWidget();
-}
-
-ipcMain.on(IPC_EVENT_TIMER_WIDGET_REQUEST_CLOSE, (event) => {
-  if (timeTrackerWindow) {
-    toggleTimeTrackerWidget();
-  }
-});
-
-const initCustomBrowserWindowOpenLogic = (mainWindow) => {
-  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+//override default window open logic, for sake of sending the entire BrowserWindow handle to React instead of BrowserWindowProxy
+const InitTimeTrackerWindowOpenLogic = (parentWindowHandle) => {
+  parentWindowHandle.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
     if (frameName === TIMER_WIDGET_NAME) {
       
       const primaryDisplay = screenElectron.getPrimaryDisplay();
 
-      const positionX = primaryDisplay.size.width - SizeTimeTracker.width - TimeTrackerWidgetPositionOffset;
-      const positionY = primaryDisplay.size.height - SizeTimeTracker.height - TimeTrackerWidgetPositionOffset;
+      //position bottom right corner
+      const positionX = primaryDisplay.size.width - SizeTimeTracker.width - TimeTrackerWindowPositionOffset;
+      const positionY = primaryDisplay.size.height - SizeTimeTracker.height - TimeTrackerWindowPositionOffset;
 
       event.preventDefault()
       Object.assign(options, {
@@ -68,12 +57,11 @@ const initCustomBrowserWindowOpenLogic = (mainWindow) => {
         minimizable: false,
         maximizable: false,
       })
-      event.newGuest = new BrowserWindow(options);
 
-      timeTrackerWindow = event.newGuest;
+      timeTrackerWindow = new BrowserWindow(options);
+      event.newGuest = timeTrackerWindow;
 
       timeTrackerWindow.on('closed', () => {
-        mainWindow.webContents.send(IPC_EVENT_TIMER_WIDGET_CLOSE);
         timeTrackerWindow = null;
       });
     }
@@ -130,7 +118,7 @@ app.on('ready', async () => {
     }
   });
 
-  initCustomBrowserWindowOpenLogic(mainWindow);
+  InitTimeTrackerWindowOpenLogic(mainWindow);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
@@ -145,6 +133,12 @@ app.on('ready', async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  const MenuActionsMap = {};
+
+  MenuActionsMap[MENU_ACTION_TOGGLE_TIMETRACKER] = function MENU_ACTION_TOGGLE_TIMETRACKER () {
+    toggleTimeTrackerWidget();
+  }
 
   const menuBuilder = new MenuBuilder(mainWindow, MenuActionsMap);
   menuBuilder.buildMenu();

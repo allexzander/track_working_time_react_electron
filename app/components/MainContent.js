@@ -1,6 +1,7 @@
 // @flow
-import React from 'react';
-import styles from './MainContent.scss';
+import React from "react";
+
+import TimerMain from "./TimerMain";
 
 import PlayImage from "../resources/play.svg";
 import StopImage from "../resources/stop.svg";
@@ -29,37 +30,14 @@ const MainContent = (props) => {
   return (
     <div id="main-content" className={`${!props.isTimerRunning ? "disabled" : ""}`}>
       <div id="main-content-container">
-       <div id="main-content-time-container">
-         <div className="main-content-time-part main-content-time-digit">
-           {hourPrimary}
-          </div>
-          <div className="main-content-time-part main-content-time-digit">
-          {hourSecondary}
-          </div>
-          <div className="main-content-time-part main-content-time-separator">
-           :
-          </div>
-          <div className="main-content-time-part main-content-time-digit">
-          {minutePrimary}
-          </div>
-          <div className="main-content-time-part main-content-time-digit">
-          {minuteSecondary}
-          </div>
-          <div className="main-content-time-part main-content-time-separator">
-           :
-          </div>
-          <div className="main-content-time-part main-content-time-digit">
-           {secondPrimary}
-          </div>
-          <div className="main-content-time-part main-content-time-digit">
-           {secondSecondary}
-          </div>
-       </div>
+       <TimerMain hourPrimary={hourPrimary} hourSecondary={hourSecondary} 
+         minutePrimary={minutePrimary} minuteSecondary={minuteSecondary}
+         secondPrimary={secondPrimary} secondSecondary={secondSecondary} />
        <div id="main-content-button-container" onClick={() => props.onToggleTimer()}>
-         <img src={ButtonImage} className="nonselectable invert"/>
+         <img src={ButtonImage} className="nonselectable invert nonselectable"/>
        </div>
-       </div>
-       </div>
+      </div>
+    </div>
   );
 }
 
